@@ -18,29 +18,20 @@ from core.utils import format_size, cleanup_old_temp_files
 
 app = Flask(__name__)
 
-# Fix for Render (Reverse Proxy) so url_for generates HTTPS links instead of HTTP
+# Fix for Render (Reverse Proxy)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
 app.config.from_object(Config)
 
-# Security Hardening: Rate Limiting
+# Security: Rate Limiting (Applied specifically to routes, not globally to static files)
 limiter = Limiter(
     get_remote_address,
     app=app,
-    default_limits=["200 per day", "50 per hour"],
     storage_uri="memory://"
 )
 
-# Allow Google Fonts and inline styles for the UI
-csp = {
-    'default-src': ['\'self\''],
-    'style-src': ['\'self\'', '\'unsafe-inline\'', 'https://fonts.googleapis.com'],
-    'font-src': ['\'self\'', 'https://fonts.gstatic.com'],
-    'img-src': ['\'self\'', 'data:']
-}
-
-# Security Hardening: HTTP Headers
-Talisman(app, content_security_policy=csp)
+# Basic HTTP Headers (Disabled CSP to ensure UI loads correctly on Render)
+Talisman(app, content_security_policy=False, force_https=False)
 
 # Periodic temp folder sweep on startup
 try:
