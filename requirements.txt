@@ -6,3 +6,4 @@ mutagen
 
 Flask-Limiter
 Flask-Talisman
+gunicorn
