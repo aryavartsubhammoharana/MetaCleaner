@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_talisman import Talisman
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from config import Config
 from core.validator import validate_file
@@ -16,6 +17,10 @@ from core.response import json_response, send_cleaned_file
 from core.utils import format_size, cleanup_old_temp_files
 
 app = Flask(__name__)
+
+# Fix for Render (Reverse Proxy) so url_for generates HTTPS links instead of HTTP
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+
 app.config.from_object(Config)
 
 # Security Hardening: Rate Limiting
@@ -26,8 +31,16 @@ limiter = Limiter(
     storage_uri="memory://"
 )
 
-# Security Hardening: HTTP Headers (XSS protection, Frame deny, etc.)
-Talisman(app, content_security_policy=None)
+# Allow Google Fonts and inline styles for the UI
+csp = {
+    'default-src': ['\'self\''],
+    'style-src': ['\'self\'', '\'unsafe-inline\'', 'https://fonts.googleapis.com'],
+    'font-src': ['\'self\'', 'https://fonts.gstatic.com'],
+    'img-src': ['\'self\'', 'data:']
+}
+
+# Security Hardening: HTTP Headers
+Talisman(app, content_security_policy=csp)
 
 # Periodic temp folder sweep on startup
 try:
