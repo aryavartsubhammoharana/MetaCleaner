@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Privacy Policy - MetaCleaner{% endblock %}
+
+{% block content %}
+<section class="info-page-section">
+    <div class="info-card glass-panel" id="privacy-card-container">
+        <h1 class="info-title">Privacy Policy</h1>
+        <p class="info-last-updated">Last Updated: July 2, 2026</p>
+        
+        <div class="info-rich-content">
+            <p>At MetaCleaner, privacy is not a feature—it is the foundation of our existence. This Privacy Policy describes how we process files and metadata, and why our system guarantees your total confidentiality.</p>
+            
+            <h2>1. Zero Storage Policy</h2>
+            <p>We do not store your files. When you upload a file, it is saved in a secured temporary directory on our servers with a randomly generated unique identifier. It is only held long enough to read its metadata and clean it.</p>
+            
+            <h2>2. Automatic Immediate Deletion</h2>
+            <p>As soon as you click the <strong>Download</strong> button, the cleaned file and the original file are permanently and immediately deleted from our disk drives. This happens at the file system level in real-time. If you close your browser or navigate away without downloading, our server-side automated cron task wipes all uploaded and cleaned files older than 15 minutes.</p>
+            
+            <h2>3. No File Logging or Inspection</h2>
+            <p>We do not inspect, catalog, index, or parse the actual contents of your uploads. We only read standard metadata container elements (such as EXIF, ID3, or docProps) to present them to you. We do not keep logs of file names, contents, metadata, or geographic coordinates extracted during the process.</p>
+            
+            <h2>4. No User Tracking or Accounts</h2>
+            <p>MetaCleaner does not require, support, or allow user registration. There are no profiles, user accounts, or login forms. We do not use persistent tracking cookies or analytics tools that compromise your digital fingerprint.</p>
+            
+            <h2>5. HTTPS and Security</h2>
+            <p>All communication between your browser and our server is secured using SSL/TLS encryption (HTTPS). This prevents third parties from eavesdropping on your file transfers.</p>
+            
+            <div class="privacy-notice-alert">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <span><strong>Reminder:</strong> Your files are processed temporarily and automatically deleted after download.</span>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

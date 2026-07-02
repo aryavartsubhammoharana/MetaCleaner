@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}About - MetaCleaner{% endblock %}
+
+{% block content %}
+<section class="info-page-section">
+    <div class="info-card glass-panel" id="about-card-container">
+        <h1 class="info-title">About MetaCleaner</h1>
+        
+        <div class="info-rich-content">
+            <p>Every picture you take with your smartphone, every document you draft in an office suite, and every voice memo you record contains hidden identifiers known as <strong>metadata</strong>. While useful for organization, this metadata poses severe privacy risks.</p>
+            
+            <h2>What is Metadata?</h2>
+            <p>Metadata is "data about data." It is embedded directly inside the file structure and is invisible during standard viewing. For example:</p>
+            <ul>
+                <li><strong>Photos:</strong> Contain GPS coordinates, camera model, lens aperture, creation date, and device serial numbers.</li>
+                <li><strong>Documents:</strong> Contain author names, revision history, corporate template names, and local file paths.</li>
+                <li><strong>Media Files:</strong> Contain comments, encoder signatures, and artist handles.</li>
+            </ul>
+
+            <h2>Why Clean Metadata?</h2>
+            <p>If you upload a photo to social media or send an invoice to a client, they can extract the file metadata and discover where you live, what software you use, and which organization built the document. MetaCleaner strips all this away, leaving only the raw file contents.</p>
+
+            <h2>Technical Design</h2>
+            <p>MetaCleaner uses a modular backend built on <strong>Python Flask</strong>, combined with highly focused data processors:</p>
+            <ul>
+                <li><strong>Pillow & pi-heif:</strong> Safely load image pixels and write them into clean JPEG, PNG, WebP, and HEIC containers, dropping all tags.</li>
+                <li><strong>pypdf:</strong> Rebuilds PDF pages without standard document metadata streams.</li>
+                <li><strong>ZipFile XML Parser:</strong> Unpacks open-XML office documents, blanking metadata entries in <code>docProps/core.xml</code> and rebuilds the packages.</li>
+                <li><strong>Mutagen & FFmpeg:</strong> Decodes and clears audio/video tags cleanly.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+{% endblock %}

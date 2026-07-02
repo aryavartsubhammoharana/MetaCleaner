@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}404 Page Not Found - MetaCleaner{% endblock %}
+
+{% block content %}
+<section class="info-page-section">
+    <div class="info-card glass-panel text-center" id="error-404-container" style="max-width: 500px; margin: 4rem auto; padding: 3rem 2rem;">
+        <div class="error-icon-wrapper" style="margin-bottom: 1.5rem;">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#9B51E0" stroke-width="2" class="floating-icon">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+        </div>
+        <h1 class="info-title" style="font-size: 2.5rem; margin-bottom: 0.5rem;">404</h1>
+        <h2 style="font-size: 1.25rem; font-weight: 500; color: var(--text-light); margin-bottom: 1rem;">Page Not Found</h2>
+        <p style="color: var(--text-muted); margin-bottom: 2rem;">The page you are looking for does not exist or has been moved to a secure directory.</p>
+        <a href="/" class="btn btn-primary btn-glow" id="btn-404-home" style="display: inline-block;">Return to Dashboard</a>
+    </div>
+</section>
+{% endblock %}

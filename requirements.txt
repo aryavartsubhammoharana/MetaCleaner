@@ -1,0 +1,8 @@
+Flask
+pillow
+pi-heif
+pypdf
+mutagen
+
+Flask-Limiter
+Flask-Talisman
