@@ -6,14 +6,22 @@ class Config:
     # Workspace root directory
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
     
-    # Temporary folders
-    TEMP_DIR = os.path.join(BASE_DIR, 'temp')
+    import tempfile
+    is_serverless = bool(os.environ.get('VERCEL') or os.environ.get('AWS_LAMBDA_FUNCTION_NAME'))
+    if is_serverless:
+        TEMP_DIR = os.path.join(tempfile.gettempdir(), 'metacleaner')
+    else:
+        TEMP_DIR = os.path.join(BASE_DIR, 'temp')
+        
     UPLOAD_FOLDER = os.path.join(TEMP_DIR, 'uploads')
     CLEANED_FOLDER = os.path.join(TEMP_DIR, 'cleaned')
     
-    # Ensure temporary folders exist
-    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-    os.makedirs(CLEANED_FOLDER, exist_ok=True)
+    # Ensure temporary folders exist safely
+    try:
+        os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+        os.makedirs(CLEANED_FOLDER, exist_ok=True)
+    except Exception as e:
+        print(f"Directory initialization warning: {e}")
     
     # Limits: 50MB Max Upload Size
     MAX_CONTENT_LENGTH = 50 * 1024 * 1024

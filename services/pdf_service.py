@@ -51,9 +51,21 @@ class PdfService:
             # Set empty metadata dictionary
             writer.add_metadata({})
             
+            # Strip XMP XML metadata stream from document catalog if present
+            try:
+                if hasattr(writer, 'root_object') and '/Metadata' in writer.root_object:
+                    del writer.root_object['/Metadata']
+            except Exception:
+                pass
+            
             with open(output_path, 'wb') as f:
                 writer.write(f)
-            return True
+            return os.path.exists(output_path) and os.path.getsize(output_path) > 0
         except Exception as e:
             print(f"Error cleaning PDF metadata: {e}")
+            if os.path.exists(output_path):
+                try:
+                    os.remove(output_path)
+                except Exception:
+                    pass
             return False

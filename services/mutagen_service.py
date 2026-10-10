@@ -3,6 +3,7 @@ import shutil
 import mutagen
 from mutagen.id3 import ID3
 from mutagen.mp4 import MP4
+from mutagen.mp3 import MP3
 
 class MutagenService:
     @staticmethod
@@ -17,7 +18,7 @@ class MutagenService:
                 return metadata
                 
             # If it's MP3/ID3
-            if isinstance(audio, mutagen.mp3.MP3) or getattr(audio, 'tags', None) is not None:
+            if isinstance(audio, MP3) or getattr(audio, 'tags', None) is not None:
                 tags = audio.tags
                 if tags:
                     # Map standard ID3 tags
@@ -108,6 +109,9 @@ class MutagenService:
             return True
         except Exception as e:
             print(f"Error cleaning Mutagen metadata: {e}")
-            # If it failed to wipe using mutagen, return True if we managed to copy it,
-            # or False if it completely failed.
-            return os.path.exists(output_path)
+            if os.path.exists(output_path):
+                try:
+                    os.remove(output_path)
+                except Exception:
+                    pass
+            return False

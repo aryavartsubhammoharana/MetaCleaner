@@ -119,20 +119,40 @@ def upload_file():
 @limiter.limit("20 per minute")
 def clean_file():
     """
-    Cleans metadata from a previously uploaded file.
-    Expects file_id in JSON payload.
+    Cleans metadata from a previously uploaded file (by file_id)
+    or directly from a multipart file upload for serverless reliability.
     """
-    data = request.get_json() or {}
-    file_id = data.get('file_id')
+    upload_path = None
+    file_id = None
     
-    if not file_id:
-        return json_response(success=False, message="Missing file_id parameter.", status_code=400)
-        
-    # Sanitize file_id to avoid path traversal
-    file_id = secure_filename(file_id)
-    upload_path = os.path.join(app.config['UPLOAD_FOLDER'], file_id)
+    if 'file' in request.files:
+        file = request.files['file']
+        if file.filename != '':
+            file_uuid = str(uuid.uuid4())
+            original_name = secure_filename(file.filename)
+            _, ext = os.path.splitext(original_name.lower())
+            file_id = f"{file_uuid}{ext}"
+            upload_path = os.path.join(app.config['UPLOAD_FOLDER'], file_id)
+            try:
+                file.save(upload_path)
+            except Exception as e:
+                return json_response(success=False, message=f"Failed to save file: {str(e)}", status_code=500)
+            
+            is_valid, err_msg = validate_file(upload_path)
+            if not is_valid:
+                if os.path.exists(upload_path):
+                    os.remove(upload_path)
+                return json_response(success=False, message=err_msg, status_code=400)
+    else:
+        data = request.get_json() or {}
+        file_id = data.get('file_id')
+        if not file_id:
+            return json_response(success=False, message="Missing file_id parameter.", status_code=400)
+            
+        file_id = secure_filename(file_id)
+        upload_path = os.path.join(app.config['UPLOAD_FOLDER'], file_id)
     
-    if not os.path.exists(upload_path):
+    if not upload_path or not os.path.exists(upload_path):
         return json_response(success=False, message="Uploaded file not found or expired.", status_code=404)
         
     cleaned_filename = f"cleaned_{file_id}"

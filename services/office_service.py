@@ -104,13 +104,32 @@ class OfficeService:
                         elif filename == 'docProps/custom.xml':
                             # Overwrite custom metadata with blank
                             z_out.writestr(filename, blank_custom)
+                        elif filename == 'docProps/app.xml':
+                            # Sanitize app.xml to strip Company, Manager, TotalTime, HyperlinkBase
+                            try:
+                                app_xml_data = z_in.read(filename)
+                                app_tree = ET.fromstring(app_xml_data)
+                                tags_to_clear = {'Company', 'Manager', 'HyperlinkBase', 'TotalTime'}
+                                for child in list(app_tree):
+                                    tag_name = child.tag.split('}')[-1] if '}' in child.tag else child.tag
+                                    if tag_name in tags_to_clear:
+                                        child.text = ''
+                                z_out.writestr(filename, ET.tostring(app_tree, encoding='utf-8', xml_declaration=True))
+                            except Exception:
+                                # If XML parse fails, write unmodified
+                                z_out.writestr(item, z_in.read(filename))
                         elif filename.startswith('docProps/thumbnail.'):
                             # Skip thumbnail if it could contain document preview screenshots
                             continue
                         else:
                             # Copy the original file unmodified
                             z_out.writestr(item, z_in.read(filename))
-            return True
+            return os.path.exists(output_path) and os.path.getsize(output_path) > 0
         except Exception as e:
             print(f"Error cleaning Office metadata: {e}")
+            if os.path.exists(output_path):
+                try:
+                    os.remove(output_path)
+                except Exception:
+                    pass
             return False

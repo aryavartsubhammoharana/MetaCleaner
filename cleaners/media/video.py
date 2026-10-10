@@ -29,10 +29,6 @@ def clean(input_path, output_path):
         if MutagenService.clean_metadata(input_path, output_path):
             return True
             
-    # 4. Fallback safe copy
-    try:
-        shutil.copyfile(input_path, output_path)
-        return True
-    except Exception as e:
-        print(f"Video cleaning fallback copy failed: {e}")
-        return False
+    # If no video cleaner succeeds, do not silently copy uncleaned files
+    print("Video cleaning: No available engine (FFmpeg/ExifTool/Mutagen) could clean this video.")
+    return False

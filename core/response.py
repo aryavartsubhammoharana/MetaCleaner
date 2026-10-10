@@ -1,4 +1,5 @@
 import os
+import time
 from flask import jsonify, Response
 
 def json_response(success=True, message="", data=None, status_code=200):
@@ -29,14 +30,15 @@ def send_cleaned_file(cleaned_path, original_path, filename, mimetype):
                     yield chunk
         finally:
             # This block runs after the response generator has finished executing
-            # (i.e. client has downloaded the file or disconnected)
             for path in [cleaned_path, original_path]:
                 if path and os.path.exists(path):
-                    try:
-                        os.remove(path)
-                        print(f"Privacy Cleanup: Successfully deleted temp file {path}")
-                    except Exception as e:
-                        print(f"Privacy Cleanup Warning: Could not delete {path}: {e}")
+                    for attempt in range(3):
+                        try:
+                            os.remove(path)
+                            print(f"Privacy Cleanup: Successfully deleted temp file {path}")
+                            break
+                        except Exception as e:
+                            time.sleep(0.05)
 
     # Build the streaming response
     response = Response(generate(), mimetype=mimetype)

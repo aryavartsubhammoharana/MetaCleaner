@@ -1,5 +1,5 @@
 import os
-from PIL import Image
+from PIL import Image, ImageOps
 from PIL.ExifTags import TAGS, GPSTAGS
 
 # Try to register HEIC support dynamically if pi-heif is installed
@@ -104,36 +104,51 @@ class ExifService:
     def clean_metadata(input_path, output_path):
         """
         Cleans image metadata by re-saving it without the EXIF headers and info chunks.
+        Preserves image orientation via exif_transpose before stripping EXIF.
         """
         try:
             with Image.open(input_path) as img:
-                # If PNG, JPEG, WebP, HEIC: save it without info/exif parameters
-                # Pillow's default save behavior will discard the EXIF info if not passed explicitly.
-                # However, some formats like PNG can store metadata in png.info dict which we can empty.
-                
-                # To be absolutely sure, copy the image pixels to a clean canvas
-                # but preserve transparency/modes correctly.
-                # Note: keeping palette information if needed
-                
-                # Let's create a clean copy of the image.
-                # For safety across modes (RGB, RGBA, P, etc.), we can create a new image
-                # and paste the original on it, or just use img.copy() but clear the info dict.
-                clean_img = img.copy()
+                # Transpose image based on EXIF orientation so rotation is preserved when EXIF is stripped
+                transposed_img = ImageOps.exif_transpose(img)
+                if transposed_img is None:
+                    transposed_img = img
+
+                # Determine save format
+                save_format = img.format
+                if not save_format:
+                    _, ext = os.path.splitext(input_path.lower())
+                    ext_map = {
+                        '.jpg': 'JPEG', '.jpeg': 'JPEG',
+                        '.png': 'PNG', '.webp': 'WEBP',
+                        '.tif': 'TIFF', '.tiff': 'TIFF',
+                        '.heic': 'HEIF'
+                    }
+                    save_format = ext_map.get(ext, 'PNG')
+
+                # Handle color modes (e.g. RGBA cannot be saved as JPEG)
+                if save_format.upper() == 'JPEG' and transposed_img.mode in ('RGBA', 'LA', 'P'):
+                    clean_img = transposed_img.convert('RGB')
+                else:
+                    clean_img = transposed_img.copy()
+
+                # Wipe embedded metadata dictionary
                 clean_img.info = {}
-                
-                # Save the clean image. 
-                # For JPEG, we save without passing exif parameter.
-                # For PNG, we save without passing custom text chunks.
-                # For HEIC, since it's registered through pi-heif, it works the same way.
-                clean_img.save(output_path, format=img.format, exif=b"")
-                
-            return True
+
+                save_kwargs = {}
+                if save_format.upper() == 'JPEG':
+                    save_kwargs['quality'] = 95
+                    save_kwargs['subsampling'] = 0
+                    save_kwargs['exif'] = b""
+                elif save_format.upper() == 'PNG':
+                    save_kwargs['optimize'] = True
+
+                clean_img.save(output_path, format=save_format, **save_kwargs)
+                return os.path.exists(output_path) and os.path.getsize(output_path) > 0
         except Exception as e:
             print(f"Error cleaning image metadata: {e}")
-            # Fallback copy
-            try:
-                import shutil
-                shutil.copyfile(input_path, output_path)
-                return True
-            except Exception:
-                return False
+            if os.path.exists(output_path):
+                try:
+                    os.remove(output_path)
+                except Exception:
+                    pass
+            return False
