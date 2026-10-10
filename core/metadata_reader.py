@@ -26,6 +26,24 @@ def read_file_metadata(filepath):
     elif category in ['audio', 'video']:
         # MP3 and MP4 tags
         metadata = MutagenService.read_metadata(filepath)
+    elif category == 'text':
+        try:
+            with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+                content = f.read()
+            lines = content.splitlines()
+            metadata['Format'] = ext.upper()
+            metadata['Total Lines'] = str(len(lines))
+            metadata['Character Count'] = str(len(content))
+            
+            # Check for invisible watermarks / zero-width characters
+            import re
+            zero_width = len(re.findall(r'[\u200b\u200c\u200d\u200e\u200f\u202a-\u202e\u2060\ufeff]', content))
+            if zero_width > 0:
+                metadata['Hidden Watermarks'] = f"{zero_width} tracking character(s) detected"
+            if content.startswith('\ufeff'):
+                metadata['BOM Signature'] = 'UTF-8 Byte Order Mark present'
+        except Exception:
+            pass
         
     # 2. Merge with ExifTool if available (it can enrich metadata or be a fallback)
     if ExifToolService.is_available():

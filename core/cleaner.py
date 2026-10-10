@@ -17,26 +17,49 @@ from cleaners.documents.pptx import clean as clean_pptx
 from cleaners.media.audio import clean as clean_audio
 from cleaners.media.video import clean as clean_video
 
+from cleaners.documents.text import clean as clean_text
+from cleaners.documents.opendocument import clean as clean_opendocument
+from cleaners.image.svg import clean as clean_svg
+
 from cleaners.generic import clean_generic
 
 # Map extensions to their cleaning functions
 CLEANERS_MAP = {
+    # Images & Vectors
     'jpg': clean_jpg,
     'jpeg': clean_jpeg,
     'png': clean_png,
     'webp': clean_webp,
     'tiff': clean_tiff,
     'heic': clean_heic,
+    'svg': clean_svg,
     
+    # Documents
     'pdf': clean_pdf,
     'docx': clean_docx,
     'xlsx': clean_xlsx,
     'pptx': clean_pptx,
+    'odt': clean_opendocument,
+    'ods': clean_opendocument,
+    'odp': clean_opendocument,
     
+    # Text, Markdown & Data
+    'txt': clean_text,
+    'md': clean_text,
+    'csv': clean_text,
+    'json': clean_text,
+    'xml': clean_text,
+    
+    # Audio & Video
     'mp3': clean_audio,
+    'wav': clean_audio,
+    'flac': clean_audio,
+    'ogg': clean_audio,
+    'm4a': clean_audio,
     'mp4': clean_video,
     'mov': clean_video,
-    'avi': clean_video
+    'avi': clean_video,
+    'mkv': clean_video
 }
 
 def clean_file_metadata(input_path, output_path):

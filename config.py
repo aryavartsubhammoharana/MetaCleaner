@@ -28,10 +28,12 @@ class Config:
     
     # Allowed formats categories
     SUPPORTED_EXTENSIONS = {
-        # Images
-        'jpg', 'jpeg', 'png', 'tiff', 'webp', 'heic',
-        # Documents
-        'pdf', 'docx', 'xlsx', 'pptx',
-        # Media
-        'mp3', 'mp4', 'mov', 'avi'
+        # Images & Vectors
+        'jpg', 'jpeg', 'png', 'tiff', 'webp', 'heic', 'svg',
+        # Documents & Spreadsheets
+        'pdf', 'docx', 'xlsx', 'pptx', 'odt', 'ods', 'odp', 'rtf',
+        # Text, Markdown & Data
+        'txt', 'md', 'csv', 'json', 'xml',
+        # Audio & Video
+        'mp3', 'wav', 'flac', 'ogg', 'm4a', 'mp4', 'mov', 'avi', 'mkv'
     }
