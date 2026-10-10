@@ -16,9 +16,18 @@ from core.cleaner import clean_file_metadata
 from core.response import json_response, send_cleaned_file
 from core.utils import format_size, cleanup_old_temp_files
 
-app = Flask(__name__)
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+app = Flask(
+    __name__,
+    static_folder=os.path.join(BASE_DIR, 'static'),
+    template_folder=os.path.join(BASE_DIR, 'templates')
+)
 
-# Fix for Render (Reverse Proxy)
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    return send_from_directory(os.path.join(BASE_DIR, 'static'), filename)
+
+# Fix for Reverse Proxy (Render / Vercel)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
 app.config.from_object(Config)
