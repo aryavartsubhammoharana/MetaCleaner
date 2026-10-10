@@ -23,8 +23,8 @@ class Config:
     except Exception as e:
         print(f"Directory initialization warning: {e}")
     
-    # Limits: 50MB Max Upload Size
-    MAX_CONTENT_LENGTH = 50 * 1024 * 1024
+    # Limits: 25MB Max Upload Size
+    MAX_CONTENT_LENGTH = 25 * 1024 * 1024
     
     # Allowed formats categories
     SUPPORTED_EXTENSIONS = {

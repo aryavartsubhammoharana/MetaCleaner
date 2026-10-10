@@ -115,6 +115,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // File Upload & Scan
     // ----------------------------------------------------
     const handleFileSelection = (file) => {
+        const MAX_SIZE = 25 * 1024 * 1024;
+        if (file.size > MAX_SIZE) {
+            alert('File size exceeds the 25MB limit.');
+            if (fileInput) fileInput.value = '';
+            return;
+        }
+
         rawSelectedFile = file;
         showStep(stepLoading);
         setStatus('processing', 'Analyzing file...');
