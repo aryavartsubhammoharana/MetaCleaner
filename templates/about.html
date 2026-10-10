@@ -3,47 +3,39 @@
 {% block title %}About - MetaCleaner{% endblock %}
 
 {% block content %}
-<div class="page-wrapper">
-    <div class="page-header">
-        <span class="badge-pill">Developed by DLM</span>
-        <h1 class="page-title">About MetaCleaner</h1>
-        <p class="page-subtitle">A high-performance, zero-storage privacy utility to permanently purge tracking signatures, EXIF tags, and hidden metadata from your files.</p>
+<div class="unscrollable-page">
+    <div class="unscrollable-header">
+        <span class="badge-tag">Developed by DLM</span>
+        <h1 class="unscrollable-title">About MetaCleaner</h1>
+        <p class="unscrollable-subtitle">A high-performance privacy engine designed to permanently purge tracking signatures and metadata from personal files.</p>
     </div>
 
-    <div class="content-grid">
-        <div class="info-panel">
+    <!-- Structured 3-Column Grid (Fits 100% on desktop screen without scrolling) -->
+    <div class="about-grid-columns">
+        <div class="section-col">
             <h2>What is Metadata?</h2>
-            <p>Metadata is "data about data," embedded invisibly inside your files during creation or export. Modern cameras, smartphones, office suites, and editors silently record extensive personal identifiers.</p>
-            
-            <div class="feature-pills-row">
-                <div class="feature-item">
-                    <h3>Photos & Images</h3>
-                    <p>Precise GPS coordinates, camera model, lens aperture, serial numbers, timestamps, and editor signatures.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>Documents & Sheets</h3>
-                    <p>Author names, corporate accounts, revision histories, editing duration, and network file paths.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>Media & Code</h3>
-                    <p>Audio/video encoders, hidden watermarks, zero-width tracking characters, and performer details.</p>
-                </div>
-            </div>
+            <p>Metadata is "data about data," embedded invisibly inside files by cameras, editors, and operating systems during export.</p>
+            <ul>
+                <li><strong>Photos:</strong> GPS coordinates, device serial numbers, lens models, and timestamps.</li>
+                <li><strong>Documents:</strong> Author names, corporate accounts, editing duration, and network paths.</li>
+                <li><strong>Media:</strong> Embedded comments, artist handles, and leak tracking watermarks.</li>
+            </ul>
         </div>
 
-        <div class="info-panel">
+        <div class="section-col">
             <h2>Why Remove Metadata?</h2>
-            <p>Sharing an uncleaned photo or document exposes your home location, organizational hierarchy, software versions, and identity to anyone with a basic file inspector. MetaCleaner strips away all tracking traces while preserving 100% of your visual and functional content.</p>
+            <p>Sharing an uncleaned photo or document exposes your home location, workplace, and device identity to third parties and web scrapers.</p>
+            <p>MetaCleaner purges all identifiers while preserving 100% of your visual and functional content with zero degradation.</p>
         </div>
 
-        <div class="info-panel">
-            <h2>Core Engine Architecture</h2>
-            <ul class="engine-list">
-                <li><strong>Images & Vectors:</strong> Pillow engine with EXIF orientation auto-transposition, saving pure pixel streams without metadata chunks (JPEG, PNG, WEBP, TIFF, HEIC, SVG).</li>
-                <li><strong>Documents & Spreadsheets:</strong> Byte-level OpenXML package parser purging <code>docProps/core.xml</code>, <code>custom.xml</code>, and <code>app.xml</code> (DOCX, XLSX, PPTX, ODT, ODS).</li>
-                <li><strong>PDF Documents:</strong> pypdf page rebuilder with complete catalog-level XML/XMP stream deletion.</li>
-                <li><strong>Text & Markdown:</strong> Zero-width tracking watermark detection and strip engine, removing invisible leak-tracking characters.</li>
-                <li><strong>Audio & Video:</strong> Stream-copy container sanitizers dropping tag containers (MP3, MP4, WAV, FLAC, MKV).</li>
+        <div class="section-col">
+            <h2>Engine Architecture</h2>
+            <ul>
+                <li><strong>Images & Vectors:</strong> Pillow with EXIF orientation auto-transposition (JPEG, PNG, WEBP, TIFF, HEIC, SVG).</li>
+                <li><strong>Documents & Sheets:</strong> Stream parser purging <code>docProps/core.xml</code> and <code>app.xml</code> (DOCX, XLSX, PPTX, ODT, ODS).</li>
+                <li><strong>PDF Files:</strong> pypdf page rebuilder with complete catalog-level XML/XMP stream deletion.</li>
+                <li><strong>Text & Markdown:</strong> Zero-width invisible watermark detector and stripper.</li>
+                <li><strong>Media:</strong> Tag container cleaners for MP3, MP4, WAV, FLAC, and MKV.</li>
             </ul>
         </div>
     </div>

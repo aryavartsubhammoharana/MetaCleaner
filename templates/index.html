@@ -3,79 +3,78 @@
 {% block title %}MetaCleaner - Simple, Secure Metadata Cleaner{% endblock %}
 
 {% block content %}
-<div class="dashboard-container">
-    <div class="dashboard-heading">
+<div class="workspace-open" id="main-processor-card">
+    <div class="workspace-header">
         <h1>Clean Metadata</h1>
         <p>Permanently remove EXIF tags, GPS locations, authors, and device signatures.</p>
     </div>
 
-    <!-- Main Card Processor -->
-    <div class="tool-card" id="main-processor-card">
-        <!-- Status Bar -->
-        <div class="card-header-bar">
-            <div class="card-status">
-                <span class="status-indicator-dot" id="status-indicator-dot"></span>
-                <span id="status-display-text">Ready to scan</span>
+    <!-- Meta Status Bar -->
+    <div class="workspace-meta-bar">
+        <div class="workspace-status">
+            <span class="status-indicator-dot" id="status-indicator-dot"></span>
+            <span id="status-display-text">Ready to scan</span>
+        </div>
+        <div>
+            Limit: 25MB &bull; Zero-Storage Architecture
+        </div>
+    </div>
+
+    <!-- STEP 1: Open Dropzone (No Box) -->
+    <div class="step-container active" id="step-upload">
+        <div class="dropzone-open" id="drop-zone">
+            <input type="file" id="file-input" class="file-input-hidden" accept=".jpg,.jpeg,.png,.webp,.tiff,.heic,.svg,.pdf,.docx,.xlsx,.pptx,.odt,.ods,.odp,.rtf,.txt,.md,.csv,.json,.xml,.mp3,.wav,.flac,.ogg,.m4a,.mp4,.mov,.avi,.mkv">
+            <div class="dropzone-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
             </div>
-            <div class="card-hint">
-                Limit: 25MB
+            <div>
+                <div class="dropzone-title">Drop your file here</div>
+                <div class="dropzone-subtitle">or <span class="browse-text">browse files</span> from your device</div>
+            </div>
+            <div class="format-pills">
+                <span class="format-pill">DOCX</span>
+                <span class="format-pill">XLSX</span>
+                <span class="format-pill">MD</span>
+                <span class="format-pill">TXT</span>
+                <span class="format-pill">CSV</span>
+                <span class="format-pill">PDF</span>
+                <span class="format-pill">IMAGES</span>
+                <span class="format-pill">MEDIA</span>
             </div>
         </div>
+    </div>
 
-        <!-- STEP 1: Upload Zone -->
-        <div class="step-container active" id="step-upload">
-            <div class="dropzone" id="drop-zone">
-                <input type="file" id="file-input" class="file-input-hidden" accept=".jpg,.jpeg,.png,.webp,.tiff,.heic,.svg,.pdf,.docx,.xlsx,.pptx,.odt,.ods,.odp,.rtf,.txt,.md,.csv,.json,.xml,.mp3,.wav,.flac,.ogg,.m4a,.mp4,.mov,.avi,.mkv">
-                <div class="dropzone-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                        <polyline points="17 8 12 3 7 8"/>
-                        <line x1="12" y1="3" x2="12" y2="15"/>
-                    </svg>
-                </div>
-                <div>
-                    <div class="dropzone-title">Drop your file here</div>
-                    <div class="dropzone-subtitle">or <span class="browse-text">browse files</span> from device</div>
-                </div>
-                <div class="format-pills">
-                    <span class="format-pill">DOCX</span>
-                    <span class="format-pill">XLSX</span>
-                    <span class="format-pill">MD</span>
-                    <span class="format-pill">TXT</span>
-                    <span class="format-pill">CSV</span>
-                    <span class="format-pill">PDF</span>
-                    <span class="format-pill">IMAGES</span>
-                    <span class="format-pill">MEDIA</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- STEP 2: Metadata Inspection Preview -->
-        <div class="step-container" id="step-preview">
-            <div class="preview-header">
-                <div class="preview-file-meta">
+    <!-- STEP 2: Open Split Preview -->
+    <div class="step-container" id="step-preview">
+        <div class="preview-layout-open">
+            <!-- Left Info Panel -->
+            <div class="preview-left-card">
+                <div style="display: flex; align-items: center; gap: 12px;">
                     <div class="file-icon-badge" id="preview-file-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                             <polyline points="14 2 14 8 20 8"/>
                         </svg>
                     </div>
-                    <div class="file-title-wrap">
+                    <div>
                         <div class="file-title-name" id="preview-filename">document.pdf</div>
                         <div class="file-title-sub">
                             <span id="preview-filesize">0 KB</span> &bull; <span id="preview-filetype">PDF</span>
                         </div>
                     </div>
                 </div>
-                <button class="btn-icon-cancel" id="btn-cancel-preview" title="Cancel and choose another file" aria-label="Cancel">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
+
+                <div class="preview-left-actions">
+                    <button class="btn btn-primary" id="btn-process-clean">Clean Metadata</button>
+                    <button class="btn btn-secondary" id="btn-discard-preview">Cancel</button>
+                </div>
             </div>
 
-            <!-- Scrollable Metadata Table (Container Scroll Only, Page Stays Fixed) -->
+            <!-- Right Metadata Table -->
             <div class="table-scroll-area">
                 <table class="metadata-table" id="metadata-table">
                     <thead>
@@ -85,71 +84,66 @@
                         </tr>
                     </thead>
                     <tbody id="metadata-table-body">
-                        <!-- Populated by JavaScript -->
+                        <!-- Loaded dynamically -->
                     </tbody>
                 </table>
                 <div class="no-metadata-box hidden" id="no-metadata-msg">
                     No removable metadata tags detected. Your file is already clean!
                 </div>
             </div>
-
-            <div class="preview-action-row">
-                <button class="btn btn-secondary" id="btn-discard-preview">Cancel</button>
-                <button class="btn btn-primary" id="btn-process-clean">Clean Metadata</button>
-            </div>
         </div>
-
-        <!-- STEP 3: Loading Progress -->
-        <div class="step-container" id="step-loading">
-            <div class="loading-box">
-                <div class="clean-spinner"></div>
-                <div>
-                    <div class="loading-title" id="loading-title-status">Processing File...</div>
-                    <div class="loading-sub" id="loading-sub-status">Analyzing file structure and headers.</div>
-                </div>
-                <div class="progress-track">
-                    <div class="progress-fill" id="progress-bar-fill"></div>
-                </div>
-                <div class="progress-text" id="progress-percentage-text">0%</div>
-            </div>
-        </div>
-
-        <!-- STEP 4: Success & Download -->
-        <div class="step-container" id="step-download-ready">
-            <div class="success-box">
-                <div class="success-badge-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                </div>
-                <div>
-                    <div class="success-title">Metadata Successfully Removed</div>
-                    <div class="success-sub">All private identifiers and tags have been wiped.</div>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-col">
-                        <span class="stat-label">Original</span>
-                        <span class="stat-value" id="stat-original-size">0 KB</span>
-                    </div>
-                    <div class="stat-col">
-                        <span class="stat-label">Cleaned</span>
-                        <span class="stat-value" id="stat-cleaned-size">0 KB</span>
-                    </div>
-                    <div class="stat-col">
-                        <span class="stat-label">Speed</span>
-                        <span class="stat-value" id="stat-time">0 ms</span>
-                    </div>
-                </div>
-
-                <div class="download-actions">
-                    <button class="btn btn-secondary" id="btn-reset-cleaner">Clean Another</button>
-                    <a href="#" class="btn btn-primary" id="btn-download-file">Download Cleaned File</a>
-                </div>
-            </div>
-        </div>
-
     </div>
+
+    <!-- STEP 3: Loading Progress -->
+    <div class="step-container" id="step-loading">
+        <div class="loading-box-open">
+            <div class="clean-spinner"></div>
+            <div>
+                <div class="loading-title" id="loading-title-status">Processing File...</div>
+                <div class="loading-sub" id="loading-sub-status">Analyzing file structure and headers.</div>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progress-bar-fill"></div>
+            </div>
+            <div class="progress-text" id="progress-percentage-text">0%</div>
+        </div>
+    </div>
+
+    <!-- STEP 4: Success & Download -->
+    <div class="step-container" id="step-download-ready">
+        <div class="success-box-open">
+            <div class="success-badge-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <div>
+                <div class="success-title">Metadata Successfully Removed</div>
+                <div class="success-sub">All private identifiers and tags have been wiped.</div>
+            </div>
+
+            <div class="stats-grid-open">
+                <div class="stat-col">
+                    <span class="stat-label">Original</span>
+                    <span class="stat-value" id="stat-original-size">0 KB</span>
+                </div>
+                <div class="stat-col">
+                    <span class="stat-label">Cleaned</span>
+                    <span class="stat-value" id="stat-cleaned-size">0 KB</span>
+                </div>
+                <div class="stat-col">
+                    <span class="stat-label">Speed</span>
+                    <span class="stat-value" id="stat-time">0 ms</span>
+                </div>
+            </div>
+
+            <div class="download-actions">
+                <button class="btn btn-secondary" id="btn-reset-cleaner">Clean Another</button>
+                <a href="#" class="btn btn-primary" id="btn-download-file">Download Cleaned File</a>
+            </div>
+        </div>
+    </div>
+
 </div>
 {% endblock %}
 

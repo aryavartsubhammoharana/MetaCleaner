@@ -3,32 +3,37 @@
 {% block title %}Privacy Policy - MetaCleaner{% endblock %}
 
 {% block content %}
-<div class="page-wrapper">
-    <div class="page-header">
-        <span class="badge-pill">Zero-Trust Architecture</span>
-        <h1 class="page-title">Privacy Policy</h1>
-        <p class="page-subtitle">Your data belongs to you alone. MetaCleaner is built on an uncompromising zero-storage, zero-retention privacy standard.</p>
+<div class="unscrollable-page">
+    <div class="unscrollable-header">
+        <span class="badge-tag">Zero-Trust Architecture</span>
+        <h1 class="unscrollable-title">Privacy Policy</h1>
+        <p class="unscrollable-subtitle">Your data belongs to you alone. MetaCleaner is built on an absolute zero-storage, zero-retention foundation.</p>
     </div>
 
-    <div class="content-grid">
-        <div class="info-panel">
-            <h2>1. Zero Storage Policy</h2>
-            <p>Uploaded files are handled purely in ephemeral memory and transient temporary directories. No files are indexed, categorized, archived, or permanently saved on server disks.</p>
+    <!-- Structured 4-Pillar Grid (Fits 100% on desktop screen without scrolling) -->
+    <div class="privacy-grid-pillars">
+        <div class="pillar-card">
+            <span class="pillar-num">01 / POLICY</span>
+            <h2>Zero Storage</h2>
+            <p>Uploaded files are handled strictly in volatile ephemeral memory and transient system directories. No file is ever indexed, stored, or archived to permanent disks.</p>
         </div>
 
-        <div class="info-panel">
-            <h2>2. Immediate Destruction on Download</h2>
-            <p>The moment you download your cleaned file, the server executes an immediate low-level deletion sequence that purges both the source upload and the cleaned copy from disk storage.</p>
+        <div class="pillar-card">
+            <span class="pillar-num">02 / PURGE</span>
+            <h2>Immediate Destruction</h2>
+            <p>The moment you download your cleaned file, the server runs an automatic low-level deletion routine that permanently purges both the upload and the cleaned copy.</p>
         </div>
 
-        <div class="info-panel">
-            <h2>3. Automated Pruning Sweep</h2>
-            <p>Any temporary files that are uploaded but never downloaded are automatically wiped by background sweepers after 15 minutes of inactivity.</p>
+        <div class="pillar-card">
+            <span class="pillar-num">03 / SWEEPER</span>
+            <h2>15-Minute Auto Sweep</h2>
+            <p>Any temporary files from abandoned or interrupted browser sessions are automatically detected and erased by server background sweepers every 15 minutes.</p>
         </div>
 
-        <div class="info-panel">
-            <h2>4. No User Tracking or Accounts</h2>
-            <p>There are no registration portals, tracking cookies, analytics pixels, or database records logging your IP address or session details.</p>
+        <div class="pillar-card">
+            <span class="pillar-num">04 / ANONYMOUS</span>
+            <h2>Zero Tracking & Logs</h2>
+            <p>MetaCleaner requires no logins, accounts, or profiles. We use zero tracking cookies, zero analytics pixels, and keep zero IP address history.</p>
         </div>
     </div>
 </div>
