@@ -110,6 +110,35 @@ html, body {
     opacity: 0.85;
 }
 
+.nav-brand-divider {
+    height: 18px;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.15);
+    margin: 0 10px;
+    align-self: center;
+}
+
+.dlm-badge {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.dlm-badge:hover .dlm-logo-img {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.dlm-logo-img {
+    height: 22px;
+    width: auto;
+    opacity: 0.88;
+    align-self: center;
+    display: block;
+    transition: var(--transition);
+}
+
 .nav-links {
     display: flex;
     align-items: center;
