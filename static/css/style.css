@@ -35,19 +35,17 @@
 
 html, body {
     width: 100%;
-    height: 100vh;
-    max-height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
     background-color: var(--bg-primary);
     color: var(--text-primary);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    user-select: none;
-    -webkit-user-select: none;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 /* Subtle Monochrome Grid & Vignette Background */
@@ -728,74 +726,153 @@ html, body {
 }
 
 /* --------------------------------------------------------------------------
-   Contained Pages (About, Privacy, 404)
+   Open Content Pages (About, Privacy, 404 - No Caged Box)
    -------------------------------------------------------------------------- */
-.contained-card {
+.page-wrapper {
     width: 100%;
-    max-width: 680px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    padding: 28px;
-    max-height: calc(100vh - 140px);
-    overflow-y: auto;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 0 32px;
+}
+
+.page-header {
     text-align: left;
+    margin-bottom: 28px;
 }
 
-.contained-card::-webkit-scrollbar {
-    width: 5px;
-}
-.contained-card::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
+.badge-pill {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: #e4e4e7;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-color);
+    padding: 4px 12px;
     border-radius: var(--radius-pill);
-}
-
-.contained-card h1 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: var(--text-primary);
-    letter-spacing: -0.4px;
-}
-
-.contained-card h2 {
-    font-size: 1.05rem;
-    font-weight: 600;
-    margin: 18px 0 8px;
-    color: #f4f4f5;
-}
-
-.contained-card p {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
     margin-bottom: 12px;
-    line-height: 1.6;
 }
 
-.contained-card ul {
-    margin: 0 0 16px 20px;
+.page-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.8px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.page-subtitle {
+    font-size: 0.96rem;
     color: var(--text-secondary);
-    font-size: 0.85rem;
+    max-width: 700px;
     line-height: 1.6;
 }
 
-.contained-card li {
+.content-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+.info-panel {
+    background: rgba(14, 16, 22, 0.65);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 24px 28px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: var(--transition-fast);
+}
+
+.info-panel:hover {
+    border-color: rgba(255, 255, 255, 0.22);
+}
+
+.info-panel h2 {
+    font-size: 1.18rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    letter-spacing: -0.3px;
+}
+
+.info-panel p {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 12px;
+}
+
+.info-panel p:last-child {
+    margin-bottom: 0;
+}
+
+.feature-pills-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+}
+
+.feature-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+}
+
+.feature-item h3 {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #ffffff;
     margin-bottom: 6px;
 }
 
-.contained-card strong {
-    color: var(--text-primary);
+.feature-item p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 0;
 }
 
-.contained-card code {
+.engine-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.engine-list li {
+    font-size: 0.86rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    padding-left: 18px;
+    position: relative;
+}
+
+.engine-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.engine-list code {
     background: rgba(255, 255, 255, 0.08);
     padding: 2px 6px;
     border-radius: 4px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     color: #ffffff;
+}
+
+.page-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 /* --------------------------------------------------------------------------

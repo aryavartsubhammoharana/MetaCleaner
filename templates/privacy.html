@@ -3,25 +3,33 @@
 {% block title %}Privacy Policy - MetaCleaner{% endblock %}
 
 {% block content %}
-<div class="contained-card">
-    <h1>Privacy Policy</h1>
-    <p><em>Effective Date: 2026</em></p>
-    <p>At MetaCleaner, absolute user privacy is the foundational design principle. We run a strict zero-log, zero-retention service.</p>
-    
-    <h2>1. Zero Storage Policy</h2>
-    <p>Uploaded files are handled purely in ephemeral memory and transient temporary directories. No files are indexed, categorized, archived, or permanently stored on disk.</p>
-    
-    <h2>2. Immediate Destruction on Download</h2>
-    <p>The moment you click the download link, the server initiates an automatic system-level deletion sequence that purges both the uploaded source and the cleaned copy from server storage.</p>
-    
-    <h2>3. Automated Pruning Sweep</h2>
-    <p>Any temporary files that are uploaded but never completed or downloaded are automatically erased by server sweepers after 15 minutes.</p>
+<div class="page-wrapper">
+    <div class="page-header">
+        <span class="badge-pill">Zero-Trust Architecture</span>
+        <h1 class="page-title">Privacy Policy</h1>
+        <p class="page-subtitle">Your data belongs to you alone. MetaCleaner is built on an uncompromising zero-storage, zero-retention privacy standard.</p>
+    </div>
 
-    <h2>4. No User Tracking or Profiling</h2>
-    <p>There are no registration portals, tracking cookies, analytics pixels, or database entries logging your IP address or session details.</p>
+    <div class="content-grid">
+        <div class="info-panel">
+            <h2>1. Zero Storage Policy</h2>
+            <p>Uploaded files are handled purely in ephemeral memory and transient temporary directories. No files are indexed, categorized, archived, or permanently saved on server disks.</p>
+        </div>
 
-    <div style="margin-top: 20px;">
-        <a href="/" class="btn btn-primary">&larr; Return to Dashboard</a>
+        <div class="info-panel">
+            <h2>2. Immediate Destruction on Download</h2>
+            <p>The moment you download your cleaned file, the server executes an immediate low-level deletion sequence that purges both the source upload and the cleaned copy from disk storage.</p>
+        </div>
+
+        <div class="info-panel">
+            <h2>3. Automated Pruning Sweep</h2>
+            <p>Any temporary files that are uploaded but never downloaded are automatically wiped by background sweepers after 15 minutes of inactivity.</p>
+        </div>
+
+        <div class="info-panel">
+            <h2>4. No User Tracking or Accounts</h2>
+            <p>There are no registration portals, tracking cookies, analytics pixels, or database records logging your IP address or session details.</p>
+        </div>
     </div>
 </div>
 {% endblock %}
