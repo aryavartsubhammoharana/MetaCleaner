@@ -1,9 +1,8 @@
-Flask
-pillow
-pi-heif
-pypdf
-mutagen
-
-Flask-Limiter
-Flask-Talisman
-gunicorn
+Flask>=3.0.0,<4.0.0
+Pillow>=10.2.0
+pi-heif>=0.14.0
+pypdf>=4.0.0
+mutagen>=1.47.0
+Flask-Limiter>=3.5.0
+Flask-Talisman>=1.1.0
+gunicorn>=22.0.0

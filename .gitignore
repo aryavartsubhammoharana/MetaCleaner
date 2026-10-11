@@ -5,3 +5,4 @@ temp/
 .vercel/
 .env
 *.log
+.pytest_cache/

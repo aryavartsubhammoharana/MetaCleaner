@@ -46,10 +46,10 @@ def validate_file(filepath):
             # PDF magic number: %PDF-
             if not header.startswith(b'%PDF'):
                 return False, "Invalid PDF file signature."
-        elif ext in ['docx', 'xlsx', 'pptx']:
-            # Office Open XML files are ZIP containers starting with PK\x03\x04
+        elif ext in ['docx', 'xlsx', 'pptx', 'odt', 'ods', 'odp']:
+            # ZIP containers starting with PK\x03\x04
             if not header.startswith(b'PK\x03\x04'):
-                return False, "Invalid Office Document signature."
+                return False, "Invalid Document archive signature."
         elif ext == 'webp':
             # RIFF .... WEBP
             if not (header.startswith(b'RIFF') and b'WEBP' in header[8:12]):

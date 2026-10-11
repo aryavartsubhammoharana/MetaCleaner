@@ -39,8 +39,23 @@ limiter = Limiter(
     storage_uri="memory://"
 )
 
-# Basic HTTP Headers (Disabled CSP to ensure UI loads correctly on Render)
-Talisman(app, content_security_policy=False, force_https=False)
+# Production Security Headers & Content Security Policy (CSP)
+csp = {
+    'default-src': ["'self'"],
+    'style-src': ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+    'font-src': ["'self'", "https://fonts.gstatic.com", "data:"],
+    'img-src': ["'self'", "data:", "blob:"],
+    'script-src': ["'self'", "'unsafe-inline'"],
+    'connect-src': ["'self'"]
+}
+
+Talisman(
+    app,
+    content_security_policy=csp,
+    force_https=False,
+    strict_transport_security=True,
+    session_cookie_secure=False
+)
 
 # Periodic temp folder sweep on startup
 try:
