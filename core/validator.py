@@ -12,6 +12,11 @@ def validate_file(filepath):
     Returns:
         (is_valid, error_message)
     """
+    # Path traversal protection
+    norm_path = os.path.abspath(filepath)
+    if '..' in filepath or not os.path.exists(norm_path):
+        return False, "Invalid or unauthorized file path."
+
     if not os.path.exists(filepath):
         return False, "File does not exist."
         
@@ -24,7 +29,9 @@ def validate_file(filepath):
         
     ext, mime_type, category = detect_file_type(filepath)
     
-    if ext not in Config.SUPPORTED_EXTENSIONS:
+    # Explicit rejection for executable / dangerous script extensions
+    dangerous_extensions = {'exe', 'bat', 'cmd', 'sh', 'php', 'py', 'js', 'vbs', 'scr', 'dll', 'so', 'dylib'}
+    if ext in dangerous_extensions or ext not in Config.SUPPORTED_EXTENSIONS:
         return False, f"Unsupported file format: .{ext}"
         
     # Prevent malicious uploads disguised with wrong extensions

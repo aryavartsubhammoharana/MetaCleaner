@@ -76,3 +76,30 @@ def test_validator_rejects_empty_file(tmp_path):
     is_valid, msg = validate_file(str(empty_file))
     assert is_valid is False
     assert "empty" in msg.lower()
+
+def test_health_check(client):
+    res = client.get('/health')
+    assert res.status_code == 200
+    data = json.loads(res.data)
+    assert data['status'] == 'healthy'
+    assert data['service'] == 'MetaCleaner'
+
+def test_hardened_security_headers(client):
+    res = client.get('/')
+    assert res.headers.get('X-Frame-Options') == 'DENY'
+    assert res.headers.get('Referrer-Policy') == 'strict-origin-when-cross-origin'
+    assert 'geolocation=()' in res.headers.get('Permissions-Policy', '')
+
+def test_validator_rejects_executable_extension(tmp_path):
+    fake_exe = tmp_path / "malicious.exe"
+    fake_exe.write_bytes(b"MZfakeexecutablepayload")
+    is_valid, msg = validate_file(str(fake_exe))
+    assert is_valid is False
+    assert "unsupported" in msg.lower()
+
+def test_custom_404_page(client):
+    res = client.get('/nonexistent-page-random')
+    assert res.status_code == 404
+    assert b"404" in res.data
+    assert b"Return to Clean" in res.data
+

@@ -16,10 +16,19 @@ class Config:
     UPLOAD_FOLDER = os.path.join(TEMP_DIR, 'uploads')
     CLEANED_FOLDER = os.path.join(TEMP_DIR, 'cleaned')
     
-    # Ensure temporary folders exist safely
+    # Session & Cookie Security
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = 'Lax'
+    SESSION_COOKIE_SECURE = bool(os.environ.get('VERCEL') or os.environ.get('PRODUCTION') or os.environ.get('FLASK_ENV') == 'production')
+    PERMANENT_SESSION_LIFETIME = 3600  # 1 hour
+    
+    # Ensure temporary folders exist safely with restricted permissions
     try:
         os.makedirs(UPLOAD_FOLDER, exist_ok=True)
         os.makedirs(CLEANED_FOLDER, exist_ok=True)
+        if hasattr(os, 'chmod') and os.name != 'nt':
+            os.chmod(UPLOAD_FOLDER, 0o700)
+            os.chmod(CLEANED_FOLDER, 0o700)
     except Exception as e:
         print(f"Directory initialization warning: {e}")
     

@@ -46,15 +46,33 @@ csp = {
     'font-src': ["'self'", "https://fonts.gstatic.com", "data:"],
     'img-src': ["'self'", "data:", "blob:"],
     'script-src': ["'self'", "'unsafe-inline'"],
-    'connect-src': ["'self'"]
+    'connect-src': ["'self'"],
+    'object-src': ["'none'"],
+    'base-uri': ["'self'"],
+    'form-action': ["'self'"]
+}
+
+permissions_policy = {
+    'geolocation': '()',
+    'camera': '()',
+    'microphone': '()',
+    'payment': '()',
+    'usb': '()',
+    'interest-cohort': '()'
 }
 
 Talisman(
     app,
     content_security_policy=csp,
-    force_https=False,
+    force_https=bool(os.environ.get('FORCE_HTTPS', False)),
     strict_transport_security=True,
-    session_cookie_secure=False
+    strict_transport_security_max_age=31536000,
+    strict_transport_security_include_subdomains=True,
+    frame_options='DENY',
+    referrer_policy='strict-origin-when-cross-origin',
+    permissions_policy=permissions_policy,
+    session_cookie_secure=Config.SESSION_COOKIE_SECURE,
+    session_cookie_http_only=True
 )
 
 # Periodic temp folder sweep on startup
@@ -248,9 +266,35 @@ def download_file(file_id):
     # Send streaming file (which deletes original and cleaned on completion)
     return send_cleaned_file(cleaned_path, original_path, user_filename, mime_type)
 
+@app.route('/health')
+def health_check():
+    """Liveness probe / health check for monitoring and container orchestration."""
+    return {
+        "status": "healthy",
+        "service": "MetaCleaner",
+        "limits_mb": Config.MAX_CONTENT_LENGTH // (1024 * 1024),
+        "supported_formats_count": len(Config.SUPPORTED_EXTENSIONS)
+    }, 200
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500
+
+@app.after_request
+def apply_additional_security_headers(response):
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Permitted-Cross-Domain-Policies'] = 'none'
+    if request.path.startswith('/static/'):
+        response.headers['Cache-Control'] = 'public, max-age=86400'
+    return response
+
+# Register process termination cleanup
+import atexit
+atexit.register(lambda: cleanup_old_temp_files(max_age_seconds=0))
 
 if __name__ == '__main__':
     app.run(debug=True, host='127.0.0.1', port=5000)
