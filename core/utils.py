@@ -29,12 +29,10 @@ def cleanup_old_temp_files(max_age_seconds=900):
             
         for filename in os.listdir(folder):
             filepath = os.path.join(folder, filename)
-            # Skip folders
             if os.path.isdir(filepath):
                 continue
                 
             try:
-                # Check creation/modification time
                 mtime = os.path.getmtime(filepath)
                 if now - mtime > max_age_seconds:
                     os.remove(filepath)

@@ -12,7 +12,6 @@ class PdfService:
             reader = PdfReader(filepath)
             info = reader.metadata
             if info:
-                # Key maps
                 keys_map = {
                     '/Title': 'Title',
                     '/Author': 'Author',
@@ -25,7 +24,6 @@ class PdfService:
                 }
                 for key, display in keys_map.items():
                     if key in info and info[key]:
-                        # Handle potential string conversions safely
                         val = info[key]
                         if isinstance(val, bytes):
                             val = val.decode('utf-8', errors='ignore')
@@ -44,14 +42,11 @@ class PdfService:
             reader = PdfReader(input_path)
             writer = PdfWriter()
             
-            # Copy all pages
             for page in reader.pages:
                 writer.add_page(page)
                 
-            # Set empty metadata dictionary
             writer.add_metadata({})
             
-            # Strip XMP XML metadata stream from document catalog if present
             try:
                 if hasattr(writer, 'root_object') and '/Metadata' in writer.root_object:
                     del writer.root_object['/Metadata']

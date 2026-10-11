@@ -1,7 +1,6 @@
 import mimetypes
 import os
 
-# Additional custom MIME types mapping if not present in the system registry
 MIME_MAP = {
     '.heic': 'image/heic',
     '.svg': 'image/svg+xml',
@@ -38,11 +37,9 @@ def detect_file_type(filepath):
     """
     _, ext = os.path.splitext(filepath.lower())
     
-    # Try custom mapping first
     mime_type = MIME_MAP.get(ext)
     
     if not mime_type:
-        # Fall back to standard mimetypes library
         mime_type, _ = mimetypes.guess_type(filepath)
     
     if not mime_type:

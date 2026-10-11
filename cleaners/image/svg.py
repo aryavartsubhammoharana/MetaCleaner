@@ -11,11 +11,8 @@ def clean(input_path, output_path):
         with open(input_path, 'r', encoding='utf-8', errors='ignore') as f:
             svg_content = f.read()
 
-        # Remove XML comments
         cleaned = re.sub(r'<!--[\s\S]*?-->', '', svg_content)
-        # Remove <metadata>...</metadata> blocks
         cleaned = re.sub(r'<metadata[\s\S]*?</metadata>', '', cleaned, flags=re.IGNORECASE)
-        # Remove editor attributes (inkscape, sodipodi, adobe illustrator)
         cleaned = re.sub(r'\s*(?:inkscape|sodipodi):[a-zA-Z0-9_-]+="[^"]*"', '', cleaned)
         cleaned = re.sub(r'\s*xmlns:(?:inkscape|sodipodi|i)="[^"]*"', '', cleaned)
 

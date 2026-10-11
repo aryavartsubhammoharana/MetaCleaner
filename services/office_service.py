@@ -5,7 +5,6 @@ import tempfile
 import shutil
 
 class OfficeService:
-    # Namespaces used in docProps/core.xml
     NAMESPACES = {
         'cp': 'http://schemas.openxmlformats.org/package/2006/metadata/core-properties',
         'dc': 'http://purl.org/dc/elements/1.1/',
@@ -24,12 +23,10 @@ class OfficeService:
 
         try:
             with zipfile.ZipFile(filepath, 'r') as z:
-                # Core metadata is in docProps/core.xml
                 if 'docProps/core.xml' in z.namelist():
                     core_xml = z.read('docProps/core.xml')
                     root = ET.fromstring(core_xml)
                     
-                    # Mapping of tag (without namespace prefix) to UI display name
                     tag_mapping = {
                         'title': 'Title',
                         'subject': 'Subject',
@@ -42,9 +39,7 @@ class OfficeService:
                         'revision': 'Revision Number'
                     }
 
-                    # Walk through the elements
                     for key, display_name in tag_mapping.items():
-                        # Search under various namespaces
                         found_elem = None
                         for ns_prefix, ns_uri in OfficeService.NAMESPACES.items():
                             found_elem = root.find(f'.//{{{ns_uri}}}{key}')
@@ -99,13 +94,10 @@ class OfficeService:
                         filename = item.filename
                         
                         if filename == 'docProps/core.xml':
-                            # Overwrite core metadata with blank
                             z_out.writestr(filename, blank_core)
                         elif filename == 'docProps/custom.xml':
-                            # Overwrite custom metadata with blank
                             z_out.writestr(filename, blank_custom)
                         elif filename == 'docProps/app.xml':
-                            # Sanitize app.xml to strip Company, Manager, TotalTime, HyperlinkBase
                             try:
                                 app_xml_data = z_in.read(filename)
                                 app_tree = ET.fromstring(app_xml_data)
@@ -116,13 +108,10 @@ class OfficeService:
                                         child.text = ''
                                 z_out.writestr(filename, ET.tostring(app_tree, encoding='utf-8', xml_declaration=True))
                             except Exception:
-                                # If XML parse fails, write unmodified
                                 z_out.writestr(item, z_in.read(filename))
                         elif filename.startswith('docProps/thumbnail.'):
-                            # Skip thumbnail if it could contain document preview screenshots
                             continue
                         else:
-                            # Copy the original file unmodified
                             z_out.writestr(item, z_in.read(filename))
             return os.path.exists(output_path) and os.path.getsize(output_path) > 0
         except Exception as e:

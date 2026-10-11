@@ -13,22 +13,18 @@ def clean(input_path, output_path):
       3. Try Mutagen (MP4 files only, deletes core tags)
       4. Fallback: Safe copy
     """
-    # 1. FFmpeg is the golden standard for video containers.
     if FFmpegService.is_available():
         if FFmpegService.clean_metadata(input_path, output_path):
             return True
             
-    # 2. ExifTool is secondary
     if ExifToolService.is_available():
         if ExifToolService.clean_metadata(input_path, output_path):
             return True
             
-    # 3. Mutagen is tertiary (handles MP4 metadata in-place)
     _, ext = os.path.splitext(input_path.lower())
     if ext == '.mp4':
         if MutagenService.clean_metadata(input_path, output_path):
             return True
             
-    # If no video cleaner succeeds, do not silently copy uncleaned files
     print("Video cleaning: No available engine (FFmpeg/ExifTool/Mutagen) could clean this video.")
     return False

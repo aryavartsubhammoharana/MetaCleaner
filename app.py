@@ -27,19 +27,16 @@ app = Flask(
 def serve_static(filename):
     return send_from_directory(os.path.join(BASE_DIR, 'static'), filename)
 
-# Fix for Reverse Proxy (Render / Vercel)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
 app.config.from_object(Config)
 
-# Security: Rate Limiting (Applied specifically to routes, not globally to static files)
 limiter = Limiter(
     get_remote_address,
     app=app,
     storage_uri="memory://"
 )
 
-# Production Security Headers & Content Security Policy (CSP)
 csp = {
     'default-src': ["'self'"],
     'style-src': ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
@@ -75,7 +72,6 @@ Talisman(
     session_cookie_http_only=True
 )
 
-# Periodic temp folder sweep on startup
 try:
     cleanup_old_temp_files(max_age_seconds=900)
 except Exception as e:
@@ -83,7 +79,6 @@ except Exception as e:
 
 @app.route('/')
 def index():
-    # Clean old files occasionally on root load
     try:
         cleanup_old_temp_files(max_age_seconds=900)
     except Exception:
@@ -112,12 +107,10 @@ def upload_file():
     if file.filename == '':
         return json_response(success=False, message="No file selected.", status_code=400)
         
-    # Generate unique file ID to prevent conflicts and bypass security vulnerabilities
     file_uuid = str(uuid.uuid4())
     original_name = secure_filename(file.filename)
     _, ext = os.path.splitext(original_name.lower())
     
-    # Save file with unique ID
     temp_filename = f"{file_uuid}{ext}"
     upload_path = os.path.join(app.config['UPLOAD_FOLDER'], temp_filename)
     
@@ -126,22 +119,18 @@ def upload_file():
     except Exception as e:
         return json_response(success=False, message=f"Failed to save uploaded file: {str(e)}", status_code=500)
         
-    # Validate file (size, extension, magic numbers)
     is_valid, err_msg = validate_file(upload_path)
     if not is_valid:
-        # Delete invalid file immediately
         if os.path.exists(upload_path):
             os.remove(upload_path)
         return json_response(success=False, message=err_msg, status_code=400)
         
-    # Read metadata
     try:
         metadata = read_file_metadata(upload_path)
         file_size = os.path.getsize(upload_path)
         formatted_size = format_size(file_size)
         ext_clean, mime_type, category = detect_file_type(upload_path)
         
-        # Prepare response data
         response_data = {
             "file_id": temp_filename,
             "original_name": original_name,
@@ -202,18 +191,15 @@ def clean_file():
     
     start_time = time.time()
     
-    # Run cleaner
     success, err_msg = clean_file_metadata(upload_path, cleaned_path)
     
     time_taken = time.time() - start_time
     
     if not success:
-        # Clean up upload file
         if os.path.exists(upload_path):
             os.remove(upload_path)
         return json_response(success=False, message=f"Failed to clean metadata: {err_msg}", status_code=500)
         
-    # Read size of cleaned file
     cleaned_size = os.path.getsize(cleaned_path)
     
     return json_response(
@@ -235,35 +221,29 @@ def download_file(file_id):
     """
     file_id = secure_filename(file_id)
     
-    # The cleaned file id should start with cleaned_
     if not file_id.startswith('cleaned_'):
         return "Invalid file path request.", 400
         
     cleaned_path = os.path.join(app.config['CLEANED_FOLDER'], file_id)
     
-    # Original file is stored as the remainder
     original_filename = file_id.replace('cleaned_', '')
     original_path = os.path.join(app.config['UPLOAD_FOLDER'], original_filename)
     
     if not os.path.exists(cleaned_path):
         return "Cleaned file not found or expired.", 404
         
-    # Read original filename from parameter to serve with a user-friendly name
     user_filename = request.args.get('name', 'cleaned_file')
     user_filename = secure_filename(user_filename)
     
-    # Prevent empty filename or extension mismatches
     if not user_filename:
         user_filename = "cleaned_file"
         
-    # Append _cleaned suffix before extension if possible
     base, ext = os.path.splitext(user_filename)
     if not base.endswith('_cleaned'):
         user_filename = f"{base}_cleaned{ext}"
         
     _, mime_type, _ = detect_file_type(cleaned_path)
     
-    # Send streaming file (which deletes original and cleaned on completion)
     return send_cleaned_file(cleaned_path, original_path, user_filename, mime_type)
 
 @app.route('/health')
@@ -292,7 +272,6 @@ def apply_additional_security_headers(response):
         response.headers['Cache-Control'] = 'public, max-age=86400'
     return response
 
-# Register process termination cleanup
 import atexit
 atexit.register(lambda: cleanup_old_temp_files(max_age_seconds=0))
 

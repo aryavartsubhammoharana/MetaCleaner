@@ -20,7 +20,6 @@ class ExifToolService:
             
         metadata = {}
         try:
-            # Run exiftool and parse output
             result = subprocess.run(
                 ['exiftool', '-s', '-G', filepath],
                 stdout=subprocess.PIPE,
@@ -29,7 +28,6 @@ class ExifToolService:
                 check=True
             )
             
-            # Simple tags map to capture important fields
             tag_mappings = {
                 'Title': 'Title',
                 'Artist': 'Author/Artist',
@@ -52,7 +50,6 @@ class ExifToolService:
                 if ':' in line:
                     part_g_tag, val = line.split(':', 1)
                     val = val.strip()
-                    # Part G tag could look like "[EXIF]           Model" or "[File]           FileName"
                     if ']' in part_g_tag:
                         group, tag = part_g_tag.split(']', 1)
                         tag = tag.strip()
@@ -76,13 +73,9 @@ class ExifToolService:
             return False
             
         try:
-            # Create a copy first if output_path is different from input_path
             if input_path != output_path:
                 shutil.copyfile(input_path, output_path)
                 
-            # Run exiftool to strip all metadata
-            # -all= deletes all metadata
-            # -overwrite_original prevents creating a _original backup file
             subprocess.run(
                 ['exiftool', '-all=', '-overwrite_original', output_path],
                 stdout=subprocess.PIPE,
@@ -90,7 +83,6 @@ class ExifToolService:
                 check=True
             )
             
-            # Additional cleanup of exiftool-created temp items if any
             return True
         except Exception as e:
             print(f"ExifTool cleaning failed: {e}")

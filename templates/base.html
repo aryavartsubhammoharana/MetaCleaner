@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>{% block title %}MetaCleaner - Remove Metadata & Protect Privacy{% endblock %}</title>
     <meta name="description" content="{% block description %}Remove hidden metadata from your photos, videos, and documents instantly. Safe, fast, secure, and privacy-first.{% endblock %}">
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -13,11 +12,8 @@
     {% block head %}{% endblock %}
 </head>
 <body>
-    <!-- Background Decor (Monochrome Grid & Vignette) -->
     <div class="bg-grid"></div>
     <div class="bg-ambient-glow"></div>
-
-    <!-- Header Navbar -->
     <header class="navbar-header">
         <div class="navbar-container">
             <div style="display: flex; align-items: center;">
@@ -34,13 +30,11 @@
                     <img src="{{ url_for('static', filename='images/dlm.png') }}" alt="DLM Logo" class="dlm-logo-img">
                 </a>
             </div>
-            
             <nav class="nav-links">
                 <a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}" id="nav-home">Clean</a>
                 <a href="/about" class="nav-link {% if request.path == '/about' %}active{% endif %}" id="nav-about">About</a>
                 <a href="/privacy" class="nav-link {% if request.path == '/privacy' %}active{% endif %}" id="nav-privacy">Privacy</a>
             </nav>
-            
             <div class="nav-actions">
                 <a href="https://github.com/aryavartsubhammoharana/MetaCleaner" target="_blank" rel="noopener noreferrer" class="github-btn" id="nav-github-link" aria-label="GitHub Repository">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -50,17 +44,12 @@
             </div>
         </div>
     </header>
-
-    <!-- Main Viewport Area (Strictly Unscrollable) -->
     <main class="main-content">
         {% block content %}{% endblock %}
     </main>
-
-    <!-- Slim Footer Status Bar -->
     <footer class="footer-bar">
         <p>Developed by <a href="https://itsme-gilt.vercel.app" target="_blank" rel="noopener noreferrer" style="color: #ffffff; text-decoration: underline; font-weight: 500;">DLM</a></p>
     </footer>
-
     {% block scripts %}{% endblock %}
 </body>
 </html>

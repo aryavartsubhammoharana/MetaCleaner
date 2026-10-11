@@ -2,7 +2,6 @@ import os
 from PIL import Image, ImageOps
 from PIL.ExifTags import TAGS, GPSTAGS
 
-# Try to register HEIC support dynamically if pi-heif is installed
 HEIC_SUPPORTED = False
 try:
     from pi_heif import register_heif_opener
@@ -18,17 +17,14 @@ class ExifService:
         Extracts GPS coordinates if available in EXIF data.
         """
         gps_info = {}
-        # Tag 34853 (0x8825) is GPSInfo
         gps_raw = exif_data.get(34853)
         if not gps_raw:
             return None
             
-        # If it's a GPSInfo dictionary
         for key in gps_raw.keys():
             sub_tag = GPSTAGS.get(key, key)
             gps_info[sub_tag] = gps_raw[key]
             
-        # Format latitude and longitude
         try:
             def to_degrees(value):
                 d = float(value[0])
@@ -67,10 +63,8 @@ class ExifService:
                 metadata['Dimensions'] = f"{img.width}x{img.height} px"
                 metadata['Format'] = img.format
                 
-                # Read EXIF
                 exif_data = img.getexif()
                 if exif_data:
-                    # Common keys we want to extract
                     target_tags = {
                         'Make': 'Device Manufacturer',
                         'Model': 'Camera Model',
@@ -86,12 +80,10 @@ class ExifService:
                         if tag_name in target_tags:
                             metadata[target_tags[tag_name]] = str(value)
                             
-                    # Extract GPS Info
                     gps_loc = ExifService.get_gps_info(exif_data)
                     if gps_loc:
                         metadata['GPS Location'] = gps_loc
 
-                # Check other metadata formats (PNG/WebP text fields)
                 for key, val in img.info.items():
                     if key in ['author', 'title', 'description', 'copyright', 'comment']:
                         metadata[key.capitalize()] = str(val)
@@ -108,12 +100,10 @@ class ExifService:
         """
         try:
             with Image.open(input_path) as img:
-                # Transpose image based on EXIF orientation so rotation is preserved when EXIF is stripped
                 transposed_img = ImageOps.exif_transpose(img)
                 if transposed_img is None:
                     transposed_img = img
 
-                # Determine save format
                 save_format = img.format
                 if not save_format:
                     _, ext = os.path.splitext(input_path.lower())
@@ -125,13 +115,11 @@ class ExifService:
                     }
                     save_format = ext_map.get(ext, 'PNG')
 
-                # Handle color modes (e.g. RGBA cannot be saved as JPEG)
                 if save_format.upper() == 'JPEG' and transposed_img.mode in ('RGBA', 'LA', 'P'):
                     clean_img = transposed_img.convert('RGB')
                 else:
                     clean_img = transposed_img.copy()
 
-                # Wipe embedded metadata dictionary
                 clean_img.info = {}
 
                 save_kwargs = {}

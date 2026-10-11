@@ -1,7 +1,6 @@
 import os
 from core.detector import detect_file_type
 
-# Import cleaner modules
 from cleaners.image.jpg import clean as clean_jpg
 from cleaners.image.jpeg import clean as clean_jpeg
 from cleaners.image.png import clean as clean_png
@@ -23,9 +22,7 @@ from cleaners.image.svg import clean as clean_svg
 
 from cleaners.generic import clean_generic
 
-# Map extensions to their cleaning functions
 CLEANERS_MAP = {
-    # Images & Vectors
     'jpg': clean_jpg,
     'jpeg': clean_jpeg,
     'png': clean_png,
@@ -34,7 +31,6 @@ CLEANERS_MAP = {
     'heic': clean_heic,
     'svg': clean_svg,
     
-    # Documents
     'pdf': clean_pdf,
     'docx': clean_docx,
     'xlsx': clean_xlsx,
@@ -43,14 +39,12 @@ CLEANERS_MAP = {
     'ods': clean_opendocument,
     'odp': clean_opendocument,
     
-    # Text, Markdown & Data
     'txt': clean_text,
     'md': clean_text,
     'csv': clean_text,
     'json': clean_text,
     'xml': clean_text,
     
-    # Audio & Video
     'mp3': clean_audio,
     'wav': clean_audio,
     'flac': clean_audio,
@@ -73,7 +67,6 @@ def clean_file_metadata(input_path, output_path):
     cleaner_func = CLEANERS_MAP.get(ext)
     
     if not cleaner_func:
-        # Fallback to generic cleaner
         print(f"No specific cleaner for .{ext}. Routing to generic cleaner.")
         success = clean_generic(input_path, output_path)
         if success:

@@ -10,6 +10,5 @@ def clean_generic(input_path, output_path):
         if ExifToolService.clean_metadata(input_path, output_path):
             return True
             
-    # Do not silently copy uncleaned files as that violates user privacy!
     print("Generic clean: ExifTool not available to clean generic file type.")
     return False

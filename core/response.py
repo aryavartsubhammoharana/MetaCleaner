@@ -21,7 +21,6 @@ def send_cleaned_file(cleaned_path, original_path, filename, mimetype):
     """
     def generate():
         try:
-            # Read the file in chunks and stream it
             with open(cleaned_path, 'rb') as f:
                 while True:
                     chunk = f.read(65536)  # 64KB chunks
@@ -29,7 +28,6 @@ def send_cleaned_file(cleaned_path, original_path, filename, mimetype):
                         break
                     yield chunk
         finally:
-            # This block runs after the response generator has finished executing
             for path in [cleaned_path, original_path]:
                 if path and os.path.exists(path):
                     for attempt in range(3):
@@ -40,9 +38,7 @@ def send_cleaned_file(cleaned_path, original_path, filename, mimetype):
                         except Exception as e:
                             time.sleep(0.05)
 
-    # Build the streaming response
     response = Response(generate(), mimetype=mimetype)
-    # Ensure Content-Disposition headers are set properly
     response.headers['Content-Disposition'] = f'attachment; filename="{filename}"'
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.headers['Pragma'] = 'no-cache'

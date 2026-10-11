@@ -17,11 +17,9 @@ class MutagenService:
             if audio is None:
                 return metadata
                 
-            # If it's MP3/ID3
             if isinstance(audio, MP3) or getattr(audio, 'tags', None) is not None:
                 tags = audio.tags
                 if tags:
-                    # Map standard ID3 tags
                     id3_mapping = {
                         'TIT2': 'Title',
                         'TPE1': 'Artist',
@@ -33,11 +31,9 @@ class MutagenService:
                         'TRCK': 'Track Number'
                     }
                     for key, display in id3_mapping.items():
-                        # ID3 tags can have sub-tags or lists, or multiple instances. Get the first one.
                         for tag_name in tags.keys():
                             if tag_name.startswith(key):
                                 val = tags[tag_name]
-                                # Comm tags are COMM:desc:lang
                                 if hasattr(val, 'text') and val.text:
                                     metadata[display] = str(val.text[0])
                                 elif hasattr(val, 'url'):
@@ -46,9 +42,7 @@ class MutagenService:
                                     metadata[display] = str(val)
                                 break
                                 
-            # If it's MP4
             if isinstance(audio, MP4):
-                # MP4 tags map
                 mp4_mapping = {
                     '\xa9nam': 'Title',
                     '\xa9ART': 'Artist',
@@ -67,9 +61,7 @@ class MutagenService:
                         else:
                             metadata[display] = str(val)
                             
-            # Fallback for generic mutagen tags dictionary
             if not metadata and hasattr(audio, 'keys'):
-                # Many tags are in format like artist, title, album, date
                 generic_mapping = {
                     'title': 'Title',
                     'artist': 'Artist',
@@ -98,10 +90,8 @@ class MutagenService:
         Copies the file to output path, then wipes tags.
         """
         try:
-            # Copy to output path first
             shutil.copyfile(input_path, output_path)
             
-            # Load the copy
             audio = mutagen.File(output_path)
             if audio is not None:
                 audio.delete()

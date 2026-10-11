@@ -48,7 +48,6 @@ def test_upload_empty_request(client):
     assert data['success'] is False
 
 def test_upload_and_clean_text_file(client, tmp_path):
-    # Test uploading a text file
     data = {
         'file': (io.BytesIO(b"Hello world! This is a test file."), 'sample.txt')
     }
@@ -58,14 +57,12 @@ def test_upload_and_clean_text_file(client, tmp_path):
     assert res_json['success'] is True
     file_id = res_json['data']['file_id']
 
-    # Clean the file
     clean_res = client.post('/clean', json={'file_id': file_id})
     assert clean_res.status_code == 200
     clean_json = json.loads(clean_res.data)
     assert clean_json['success'] is True
     cleaned_file_id = clean_json['data']['cleaned_file_id']
 
-    # Download cleaned file
     download_res = client.get(f'/download/{cleaned_file_id}?name=sample.txt')
     assert download_res.status_code == 200
     assert b"Hello world" in download_res.data

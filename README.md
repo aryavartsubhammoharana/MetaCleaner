@@ -1,4 +1,3 @@
-# 🌌 MetaCleaner
 
 <div align="center">
   <p><strong>A Modern, Zero-Trust Metadata Cleaner Web Application.</strong></p>
@@ -7,11 +6,9 @@
 
 ---
 
-## 📖 Overview
 
 **MetaCleaner** is a production-ready, highly secure web application designed to inspect and scrub metadata from a wide variety of file formats. Built with a robust Flask backend and an immersive 3D glassmorphic frontend, it guarantees absolute privacy by processing files entirely in memory/temporary storage and immediately wiping them from disk upon completion.
 
-## ✨ Key Features
 
 - **🛡️ Zero-Trust Privacy Architecture:** 
   - **In-memory Stream Deletion:** Files are instantly wiped during the download streaming process.
@@ -27,7 +24,6 @@
 
 ---
 
-## 🧠 System Architecture & Workflow
 
 The following flowchart illustrates the entire lifecycle of a file processed through MetaCleaner:
 
@@ -97,7 +93,6 @@ graph TD
 
 ---
 
-## 🛠️ Tech Stack
 
 - **Backend:** Python 3.9+, Flask, Flask-Limiter, Flask-Talisman, Gunicorn, Werkzeug
 - **Frontend:** Vanilla HTML5, CSS3 (Glassmorphism & Neon UI), JavaScript (ES6+ AJAX)
@@ -106,7 +101,6 @@ graph TD
 
 ---
 
-## 🗂️ Project Structure
 
 ```text
 metacleaner/
@@ -144,15 +138,12 @@ metacleaner/
 
 ---
 
-## 🚀 Setup & Installation
 
-### 1. Prerequisites
 Ensure you have the following installed on your system:
 - **Python 3.9** or higher.
 - *(Optional but Recommended)* **[ExifTool](https://exiftool.org/)**: For comprehensive fallback support on edge-case files.
 - *(Optional but Recommended)* **[FFmpeg](https://ffmpeg.org/)**: For robust media stream cleaning.
 
-### 2. Installation
 Clone the repository and install the Python dependencies:
 
 ```bash
@@ -161,7 +152,6 @@ cd metacleaner
 pip install -r requirements.txt
 ```
 
-### 3. Running the Application
 Start the Flask development server:
 
 ```bash
@@ -169,7 +159,6 @@ python app.py
 ```
 *The application will be available locally at `http://127.0.0.1:5000`.*
 
-### 4. Production Deployment
 For production environments, it is highly recommended to run MetaCleaner via Gunicorn or behind a reverse proxy (e.g., Nginx, Render, Heroku):
 ```bash
 gunicorn -w 4 -b 0.0.0.0:5000 app:app
@@ -178,7 +167,6 @@ gunicorn -w 4 -b 0.0.0.0:5000 app:app
 
 ---
 
-## 🔒 Security Practices & Privacy Policy
 
 Privacy isn't an afterthought—it's the core of MetaCleaner.
 - **No Persistent Storage:** Uploaded and processed files are saved temporarily to a localized `temp/` folder using obfuscated UUID filenames.
@@ -189,5 +177,4 @@ Privacy isn't an afterthought—it's the core of MetaCleaner.
 
 ---
 
-## 📄 License
 This project is provided as-is. Use responsibly and ensure you have the right to modify the files you process.

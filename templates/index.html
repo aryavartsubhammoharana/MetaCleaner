@@ -1,15 +1,11 @@
 {% extends 'base.html' %}
-
 {% block title %}MetaCleaner - Simple, Secure Metadata Cleaner{% endblock %}
-
 {% block content %}
 <div class="workspace-open" id="main-processor-card">
     <div class="workspace-header">
         <h1>Clean Metadata</h1>
         <p>Permanently remove EXIF tags, GPS locations, authors, and device signatures.</p>
     </div>
-
-    <!-- Meta Status Bar -->
     <div class="workspace-meta-bar">
         <div class="workspace-status">
             <span class="status-indicator-dot" id="status-indicator-dot"></span>
@@ -19,8 +15,6 @@
             Limit: 25MB
         </div>
     </div>
-
-    <!-- STEP 1: Open Dropzone (No Box) -->
     <div class="step-container active" id="step-upload">
         <div class="dropzone-open" id="drop-zone">
             <input type="file" id="file-input" class="file-input-hidden" accept=".jpg,.jpeg,.png,.webp,.tiff,.heic,.svg,.pdf,.docx,.xlsx,.pptx,.odt,.ods,.odp,.rtf,.txt,.md,.csv,.json,.xml,.mp3,.wav,.flac,.ogg,.m4a,.mp4,.mov,.avi,.mkv">
@@ -47,11 +41,8 @@
             </div>
         </div>
     </div>
-
-    <!-- STEP 2: Open Split Preview -->
     <div class="step-container" id="step-preview">
         <div class="preview-layout-open">
-            <!-- Left Info Panel -->
             <div class="preview-left-card">
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <div class="file-icon-badge" id="preview-file-icon">
@@ -67,14 +58,11 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="preview-left-actions">
                     <button class="btn btn-primary" id="btn-process-clean">Clean Metadata</button>
                     <button class="btn btn-secondary" id="btn-discard-preview">Cancel</button>
                 </div>
             </div>
-
-            <!-- Right Metadata Table -->
             <div class="table-scroll-area">
                 <table class="metadata-table" id="metadata-table">
                     <thead>
@@ -84,7 +72,6 @@
                         </tr>
                     </thead>
                     <tbody id="metadata-table-body">
-                        <!-- Loaded dynamically -->
                     </tbody>
                 </table>
                 <div class="no-metadata-box hidden" id="no-metadata-msg">
@@ -93,8 +80,6 @@
             </div>
         </div>
     </div>
-
-    <!-- STEP 3: Loading Progress -->
     <div class="step-container" id="step-loading">
         <div class="loading-box-open">
             <div class="clean-spinner"></div>
@@ -108,8 +93,6 @@
             <div class="progress-text" id="progress-percentage-text">0%</div>
         </div>
     </div>
-
-    <!-- STEP 4: Success & Download -->
     <div class="step-container" id="step-download-ready">
         <div class="success-box-open">
             <div class="success-badge-icon">
@@ -121,7 +104,6 @@
                 <div class="success-title">Metadata Successfully Removed</div>
                 <div class="success-sub">All private identifiers and tags have been wiped.</div>
             </div>
-
             <div class="stats-grid-open">
                 <div class="stat-col">
                     <span class="stat-label">Original</span>
@@ -136,17 +118,14 @@
                     <span class="stat-value" id="stat-time">0 ms</span>
                 </div>
             </div>
-
             <div class="download-actions">
                 <button class="btn btn-secondary" id="btn-reset-cleaner">Clean Another</button>
                 <a href="#" class="btn btn-primary" id="btn-download-file">Download Cleaned File</a>
             </div>
         </div>
     </div>
-
 </div>
 {% endblock %}
-
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 {% endblock %}

@@ -20,9 +20,6 @@ class FFmpegService:
             return False
             
         try:
-            # -y overwrites output file
-            # -map_metadata -1 strips all metadata
-            # -c copy performs stream copy (no transcoding, ultra fast)
             cmd = ['ffmpeg', '-y', '-i', input_path, '-map_metadata', '-1', '-c', 'copy', output_path]
             
             result = subprocess.run(
