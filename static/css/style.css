@@ -723,6 +723,7 @@ html, body {
 .hidden {
     display: none !important;
 }
+
 @media (max-width: 900px) {
     html, body {
         height: auto;
@@ -740,6 +741,8 @@ html, body {
         padding: 30px 16px;
     }
 }
+
+}
 @keyframes fadeInUp {
   from {opacity: 0; transform: translateY(20px);}
   to {opacity: 1; transform: translateY(0);}
@@ -751,4 +754,87 @@ html, body {
 
 .fade-in {
   animation: fadeIn 0.5s ease-out both;
+}
+
+/* Responsive adjustments for tablets and iPads */
+@media (max-width: 1200px) {
+    /* Reduce navbar height on medium screens */
+    .navbar-header {
+        height: 48px;
+        min-height: 48px;
+        padding: 0 24px;
+    }
+    /* Adjust main content padding */
+    .main-content {
+        padding: 24px 20px;
+    }
+    /* About page grid: two columns on medium screens */
+    .about-grid-columns {
+        grid-template-columns: 1fr 1fr;
+    }
+    /* Privacy pillars: two columns on medium screens */
+    .privacy-grid-pillars {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile specific tweaks */
+@media (max-width: 600px) {
+    .navbar-header {
+        height: 44px;
+        min-height: 44px;
+        padding: 0 16px;
+    }
+    .main-content {
+        padding: 20px 12px;
+    }
+    .about-grid-columns,
+    .privacy-grid-pillars {
+        grid-template-columns: 1fr;
+    }
+    .unscrollable-page {
+        gap: 12px;
+    }
+    .nav-links {
+        gap: 4px;
+    }
+    .nav-link {
+        font-size: 0.78rem;
+        padding: 4px 8px;
+    }
+}
+
+/* iPad and larger tablets (portrait) */
+@media (max-width: 1024px) {
+    .about-grid-columns {
+        grid-template-columns: 1fr 1fr;
+    }
+    .privacy-grid-pillars {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .navbar-header {
+        height: 46px;
+        min-height: 46px;
+        padding: 0 20px;
+    }
+    .main-content {
+        padding: 22px 18px;
+    }
+}
+
+/* Desktop enhancements for wide screens */
+@media (min-width: 1500px) {
+    .main-content {
+        max-width: 1400px;
+        padding: 32px 40px;
+    }
+    .navbar-container {
+        max-width: 1400px;
+    }
+    .about-grid-columns {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    .privacy-grid-pillars {
+        grid-template-columns: repeat(4, 1fr);
+    }
 }
