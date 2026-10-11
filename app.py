@@ -27,6 +27,13 @@ app = Flask(
 def serve_static(filename):
     return send_from_directory(os.path.join(BASE_DIR, 'static'), filename)
 
+@app.context_processor
+def inject_version_context():
+    return {
+        'app_version': Config.APP_VERSION,
+        'build_id': Config.BUILD_ID,
+    }
+
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
 app.config.from_object(Config)
@@ -252,6 +259,8 @@ def health_check():
     return {
         "status": "healthy",
         "service": "MetaCleaner",
+        "version": Config.APP_VERSION,
+        "build_id": Config.BUILD_ID,
         "limits_mb": Config.MAX_CONTENT_LENGTH // (1024 * 1024),
         "supported_formats_count": len(Config.SUPPORTED_EXTENSIONS)
     }, 200
@@ -268,8 +277,18 @@ def internal_server_error(e):
 def apply_additional_security_headers(response):
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-Permitted-Cross-Domain-Policies'] = 'none'
+    response.headers['X-App-Version'] = Config.APP_VERSION
+    response.headers['X-Build-ID'] = Config.BUILD_ID
+
     if request.path.startswith('/static/'):
-        response.headers['Cache-Control'] = 'public, max-age=86400'
+        if request.args.get('v'):
+            response.headers['Cache-Control'] = 'public, max-age=31536000, immutable'
+        else:
+            response.headers['Cache-Control'] = 'public, max-age=300, must-revalidate'
+    elif response.mimetype == 'text/html' or request.path.startswith(('/upload', '/clean', '/download', '/health')):
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
     return response
 
 import atexit

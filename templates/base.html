@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>{% block title %}MetaCleaner - Remove Metadata & Protect Privacy{% endblock %}</title>
     <meta name="description" content="{% block description %}Remove hidden metadata from your photos, videos, and documents instantly. Safe, fast, secure, and privacy-first.{% endblock %}">
+    <meta name="application-version" content="{{ app_version }}">
+    <meta name="build-id" content="{{ build_id }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v={{ build_id }}">
     {% block head %}{% endblock %}
 </head>
 <body>
@@ -27,7 +29,7 @@
                 </a>
                 <span class="nav-brand-divider"></span>
                 <a href="https://itsme-gilt.vercel.app" target="_blank" rel="noopener noreferrer" class="dlm-badge" title="Developed by DLM">
-                    <img src="{{ url_for('static', filename='images/dlm.png') }}" alt="DLM Logo" class="dlm-logo-img">
+                    <img src="{{ url_for('static', filename='images/dlm.png') }}?v={{ build_id }}" alt="DLM Logo" class="dlm-logo-img">
                 </a>
             </div>
             <nav class="nav-links">

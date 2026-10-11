@@ -80,6 +80,34 @@ def test_health_check(client):
     data = json.loads(res.data)
     assert data['status'] == 'healthy'
     assert data['service'] == 'MetaCleaner'
+    assert 'version' in data
+    assert 'build_id' in data
+
+def test_cache_control_and_version_headers(client):
+    res = client.get('/')
+    assert res.status_code == 200
+    cache_control = res.headers.get('Cache-Control', '')
+    assert 'no-cache' in cache_control
+    assert 'no-store' in cache_control
+    assert 'max-age=0' in cache_control
+    assert res.headers.get('X-App-Version') is not None
+    assert res.headers.get('X-Build-ID') is not None
+    assert b'name="application-version"' in res.data
+    assert b'name="build-id"' in res.data
+    assert b'style.css?v=' in res.data
+    assert b'script.js?v=' in res.data
+
+def test_static_asset_cache_control_behavior(client):
+    res_versioned = client.get('/static/css/style.css?v=1.2.0')
+    assert res_versioned.status_code == 200
+    cc_versioned = res_versioned.headers.get('Cache-Control', '')
+    assert 'immutable' in cc_versioned
+    assert 'max-age=31536000' in cc_versioned
+
+    res_unversioned = client.get('/static/css/style.css')
+    assert res_unversioned.status_code == 200
+    cc_unversioned = res_unversioned.headers.get('Cache-Control', '')
+    assert 'must-revalidate' in cc_unversioned
 
 def test_hardened_security_headers(client):
     res = client.get('/')

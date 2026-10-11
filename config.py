@@ -1,6 +1,43 @@
 import os
+import hashlib
+import subprocess
+
+def _determine_version():
+    app_ver = os.environ.get('APP_VERSION', '1.2.0')
+    git_sha = (
+        os.environ.get('VERCEL_GIT_COMMIT_SHA') or
+        os.environ.get('GIT_COMMIT') or
+        os.environ.get('COMMIT_REF')
+    )
+    if git_sha:
+        return app_ver, f"{app_ver}-{git_sha[:7]}"
+    try:
+        base_dir = os.path.abspath(os.path.dirname(__file__))
+        out = subprocess.check_output(
+            ['git', 'rev-parse', '--short', 'HEAD'],
+            cwd=base_dir,
+            stderr=subprocess.DEVNULL
+        ).decode('utf-8').strip()
+        if out:
+            return app_ver, f"{app_ver}-{out}"
+    except Exception:
+        pass
+    try:
+        base_dir = os.path.abspath(os.path.dirname(__file__))
+        static_dir = os.path.join(base_dir, 'static')
+        h = hashlib.md5()
+        for root, _, files in os.walk(static_dir):
+            for f in sorted(files):
+                fp = os.path.join(root, f)
+                h.update(f.encode())
+                h.update(str(os.path.getmtime(fp)).encode())
+        return app_ver, f"{app_ver}-{h.hexdigest()[:7]}"
+    except Exception:
+        pass
+    return app_ver, app_ver
 
 class Config:
+    APP_VERSION, BUILD_ID = _determine_version()
     SECRET_KEY = os.environ.get('SECRET_KEY', 'metacleaner-secret-key-3d-glow')
     
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
