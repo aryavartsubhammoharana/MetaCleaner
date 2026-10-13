@@ -18,16 +18,19 @@ def test_homepage_loads(client):
     assert res.status_code == 200
     assert b"MetaCleaner" in res.data
     assert b"Developed by" in res.data
+    assert b"fade-in-up" in res.data
 
 def test_about_page(client):
     res = client.get('/about')
     assert res.status_code == 200
     assert b"About" in res.data
+    assert b"fade-in-up" in res.data
 
 def test_privacy_page(client):
     res = client.get('/privacy')
     assert res.status_code == 200
     assert b"Privacy" in res.data
+    assert b"fade-in-up" in res.data
 
 def test_security_headers_and_csp(client):
     res = client.get('/')
